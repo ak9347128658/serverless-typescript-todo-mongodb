@@ -1,0 +1,42 @@
+service: todo-node-typescript-mongodb
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: ap-south-1
+  esbuild:
+    enabled: false
+  httpApi:
+    cors: true
+  timeout: 900
+
+functions:
+  TodoFunction:
+    handler: app/handler.todoHandler
+    events:
+      - httpApi:
+          path: /get-todo
+          method: get
+      - httpApi:
+          path: /get-todo/{id}
+          method: get
+      - httpApi:
+          path: /create-todo
+          method: post
+      - httpApi:
+          path: /update-todo
+          method: put
+      - httpApi:
+          path: /delete-todo/{id}
+          method: delete
+      - httpApi:
+          path: /test-post/{id}
+          method: post
+  # OtherFunction:
+  #   handler: app/handler.otherHandler
+  #   events:
+  #     - httpApi:
+
+plugins:
+  - serverless-offline
+  - serverless-prune-plugin
