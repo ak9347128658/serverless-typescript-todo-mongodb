@@ -14,8 +14,18 @@ class TodoRepository {
     return await newTodo.save();
   }
 
-  public async read(): Promise<ITodoDocument[]> {
-    return await this.model.find();
+  public async read({
+    limit,
+    offset,
+  }: {
+    limit: number;
+    offset: number;
+  }): Promise<ITodoDocument[]> {
+    return await this.model.find().skip(offset).limit(limit);
+  }
+
+  public async count(): Promise<number> {
+    return await this.model.countDocuments();
   }
 
   public async update(

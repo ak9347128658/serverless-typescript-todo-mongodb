@@ -28,7 +28,19 @@ class TodoService {
     if (id) {
       return SuccessResponse([await this.todoRepository.getById(id)]);
     }
-    return SuccessResponse(await this.todoRepository.read());
+
+    const size = parseInt(event.queryStringParameters?.size || "10", 10);
+    const page = parseInt(event.queryStringParameters?.page || "1", 10);
+    const offset = (page - 1) * size;
+
+    const totalData = await this.todoRepository.count();
+    const todos = await this.todoRepository.read({ limit: size, offset });
+
+    return SuccessResponse({
+      currentPage: page,
+      totalData,
+      data: todos,
+    });
   }
 
   public async updateTodo(event: APIGatewayProxyEventV2) {
