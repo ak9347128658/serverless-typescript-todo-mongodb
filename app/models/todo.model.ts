@@ -22,6 +22,22 @@ class TodoValidator implements ITodo {
   completed: boolean;
 }
 
+class TodoValidatorForPatch implements ITodo {
+  @IsOptional()
+  @IsString()
+  @Length(2, 50)
+  title: string;
+
+  @IsOptional()
+  @IsString()
+  @Length(2, 100)
+  description: string;
+
+  @IsOptional()
+  @IsBoolean()
+  completed: boolean;
+}
+
 interface ITodoDocument extends ITodo, Document {}
 
 const todoSchema = new Schema<ITodoDocument>({
@@ -33,4 +49,10 @@ const todoSchema = new Schema<ITodoDocument>({
 const TodoModel: Model<ITodoDocument> = model("Todo", todoSchema);
 container.register<Model<ITodoDocument>>("TodoModel", { useValue: TodoModel });
 
-export { ITodo, ITodoDocument, TodoModel, TodoValidator };
+export {
+  ITodo,
+  ITodoDocument,
+  TodoModel,
+  TodoValidator,
+  TodoValidatorForPatch,
+};

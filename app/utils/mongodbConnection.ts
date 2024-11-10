@@ -4,7 +4,7 @@ import { autoInjectable } from "tsyringe";
 @autoInjectable()
 class MongoDBConnection {
   private uri: string =
-    "mongodb+srv://ak2311581:n89GlxaE8JxBMpx2@cluster0.ancybcx.mongodb.net/";
+    "mongodb+srv://ak2311581:QSvozd9aUcgxDcGi@cluster0.ancybcx.mongodb.net/";
   private options: ConnectOptions;
 
   constructor(options: ConnectOptions) {

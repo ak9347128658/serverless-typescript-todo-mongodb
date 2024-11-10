@@ -24,8 +24,8 @@ functions:
           path: /create-todo
           method: post
       - httpApi:
-          path: /update-todo
-          method: put
+          path: /update-todo/{id}
+          method: patch
       - httpApi:
           path: /delete-todo/{id}
           method: delete

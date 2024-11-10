@@ -1,7 +1,7 @@
 import { APIGatewayProxyEventV2 } from "aws-lambda";
 import { plainToClass } from "class-transformer";
 import { autoInjectable, inject } from "tsyringe";
-import { TodoValidator } from "../models/todo.model";
+import { TodoValidator, TodoValidatorForPatch } from "../models/todo.model";
 import TodoRepository from "../repositories/todo.repository";
 import { AppValidationError } from "../utils/errors";
 import { SuccessResponse, AppValidationResponse } from "app/utils/reponse";
@@ -20,7 +20,12 @@ class TodoService {
 
     const error = await AppValidationError(input);
     if (error) return AppValidationResponse(error);
-    return SuccessResponse(await this.todoRepository.create(input), 201);
+    const data = await this.todoRepository.create(input);
+    const totalData = await this.todoRepository.count();
+    return SuccessResponse({
+      data,
+      totalData,
+    });
   }
 
   public async getTodos(event: APIGatewayProxyEventV2) {
@@ -45,7 +50,7 @@ class TodoService {
 
   public async updateTodo(event: APIGatewayProxyEventV2) {
     const id = event.pathParameters?.id; // query event.queryStringParameters?.id
-    const input = plainToClass(TodoValidator, JSON.parse(event.body!));
+    const input = plainToClass(TodoValidatorForPatch, JSON.parse(event.body!));
     const error = await AppValidationError(input);
     if (error) return AppValidationResponse(error);
     return SuccessResponse(await this.todoRepository.update(id, input));
